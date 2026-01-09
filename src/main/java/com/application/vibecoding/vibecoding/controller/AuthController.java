@@ -8,10 +8,7 @@ import com.application.vibecoding.vibecoding.service.AuthService;
 import com.application.vibecoding.vibecoding.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,12 +19,12 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> signup(SignUpRequest request){
+    public ResponseEntity<AuthResponse> signup(@RequestBody SignUpRequest request){
         return ResponseEntity.ok(authService.signup(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> signup(LoginRequest request){
+    public ResponseEntity<AuthResponse> signup(@RequestBody LoginRequest request){
         return ResponseEntity.ok(authService.login(request));
     }
 
