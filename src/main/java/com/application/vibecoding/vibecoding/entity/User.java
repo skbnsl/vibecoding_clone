@@ -1,17 +1,25 @@
 package com.application.vibecoding.vibecoding.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
 @Getter
 @Setter
-@FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
-public class  User {
+@Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "users")
+public class  User { // User is predefined keyword in postgres
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String email;
@@ -19,7 +27,9 @@ public class  User {
 
     private String avatarUrl;
 
+    @CreationTimestamp
     Instant createdAt;
+    @UpdateTimestamp
     Instant updatedAt;
     Instant deletedAt; //soft deleted
 }
