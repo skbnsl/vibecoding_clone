@@ -1,4 +1,7 @@
 package com.application.vibecoding.vibecoding.dto.member;
 
-public record UpdateMemberRoleRequest() {
+import com.application.vibecoding.vibecoding.enums.ProjectRole;
+
+public record UpdateMemberRoleRequest(ProjectRole role) {
+
 }

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,11 +42,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponse getUserProjectById(Long id, Long userId) {
-        return null;
-    }
-
-    @Override
     public ProjectResponse createProject(ProjectRequest request, Long userId) {
         User owner = userRepository.findById(userId).orElseThrow();
 
@@ -62,12 +58,36 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public ProjectResponse getUserProjectById(Long id, Long userId) {
+        Project project = getAccessibleProjectById(id, userId);
+        return projectMapper.toProjectResponse(project);
+    }
+
+    @Override
     public ProjectResponse updateProject(Long id, ProjectRequest request, Long userId) {
-        return null;
+        Project project = getAccessibleProjectById(id, userId);
+        if(!project.getOwner().getId().equals(userId)){
+            throw new RuntimeException("You are not allowed to update!");
+        }
+        project.setName(request.name());
+        project = projectRepository.save(project);
+
+        return projectMapper.toProjectResponse(project);
     }
 
     @Override
     public void softDelete(Long id, Long userId) {
-
+        Project project = getAccessibleProjectById(id, userId);
+        if(!project.getOwner().getId().equals(userId)){
+            throw new RuntimeException("You are not allowed to delete!");
+        }
+        project.setDeletedAt(Instant.now()); // means project is deleted, if deletedAt is null means project is not deleted
+        projectRepository.save(project);
     }
+
+    //INTERNAL METHODS
+    public Project getAccessibleProjectById(Long projectId, Long userId){
+        return projectRepository.findAccessibleProjectById(projectId, userId).orElseThrow();
+    }
+
 }
