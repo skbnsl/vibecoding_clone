@@ -4,6 +4,7 @@ import com.application.vibecoding.vibecoding.dto.project.ProjectRequest;
 import com.application.vibecoding.vibecoding.dto.project.ProjectResponse;
 import com.application.vibecoding.vibecoding.dto.project.ProjectSummaryResponse;
 import com.application.vibecoding.vibecoding.service.ProjectService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,13 @@ public class ProjectController {
     }
 
     @PostMapping
-    private ResponseEntity<ProjectResponse> createProject(@RequestBody ProjectRequest request){
+    private ResponseEntity<ProjectResponse> createProject(@RequestBody @Valid ProjectRequest request){
         Long userId = 1L;
         return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(request, userId));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProjectResponse> updateProject(@PathVariable Long id, @RequestBody ProjectRequest request){
+    public ResponseEntity<ProjectResponse> updateProject(@PathVariable Long id, @RequestBody @Valid ProjectRequest request){
         Long userId = 1L;
         return ResponseEntity.ok(projectService.updateProject(id, request, userId));
     }

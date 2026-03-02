@@ -5,6 +5,7 @@ import com.application.vibecoding.vibecoding.dto.member.MemberResponse;
 import com.application.vibecoding.vibecoding.dto.member.UpdateMemberRoleRequest;
 import com.application.vibecoding.vibecoding.entity.ProjectMember;
 import com.application.vibecoding.vibecoding.service.ProjectMemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class ProjectMemberController {
 
     @PostMapping
     public ResponseEntity<MemberResponse> inviteMember(@PathVariable Long projectId,
-                                                       @RequestBody InviteMemberRequest request){
+                                                       @RequestBody @Valid InviteMemberRequest request){
         Long userId = 1L;
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 projectMemberService.inviteMember(projectId, request, userId)
@@ -38,7 +39,7 @@ public class ProjectMemberController {
     @PatchMapping("/{memberId}")
     public ResponseEntity<MemberResponse> updateMemberRole(@PathVariable Long projectId,
                                                            @PathVariable Long memberId,
-                                                           @RequestBody UpdateMemberRoleRequest request){
+                                                           @RequestBody @Valid  UpdateMemberRoleRequest request){
         Long userId = 1L;
         return ResponseEntity.ok(projectMemberService.updateMemberRole(projectId,memberId,request,userId));
     }

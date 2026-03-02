@@ -5,6 +5,7 @@ import com.application.vibecoding.vibecoding.dto.project.ProjectResponse;
 import com.application.vibecoding.vibecoding.dto.project.ProjectSummaryResponse;
 import com.application.vibecoding.vibecoding.entity.Project;
 import com.application.vibecoding.vibecoding.entity.User;
+import com.application.vibecoding.vibecoding.error.ResourceNotFoundException;
 import com.application.vibecoding.vibecoding.mapper.ProjectMapper;
 import com.application.vibecoding.vibecoding.repository.ProjectRepository;
 import com.application.vibecoding.vibecoding.repository.UserRepository;
@@ -87,7 +88,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     //INTERNAL METHODS
     public Project getAccessibleProjectById(Long projectId, Long userId){
-        return projectRepository.findAccessibleProjectById(projectId, userId).orElseThrow();
+        return projectRepository.findAccessibleProjectById(projectId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project"," "));
     }
 
 }
