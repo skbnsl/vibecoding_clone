@@ -22,10 +22,11 @@ public class  User { // User is predefined keyword in postgres
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-    private String passwordHash;
+    private String name;
+    private String username;
+    private String password;
 
-    private String avatarUrl;
+    /*private String avatarUrl;*/
 
     @CreationTimestamp
     Instant createdAt;

@@ -1,4 +1,8 @@
 package com.application.vibecoding.vibecoding.dto.auth;
 
-public record UserProfileResponse() {
+public record UserProfileResponse(
+        Long id,
+        String username,
+        String name
+) {
 }
