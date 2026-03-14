@@ -3,16 +3,19 @@ spring:
     name: vibecoding
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/testDb
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: Sagar@123
+    password: "!@#$%^&*BANSAL"
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
+jwt:
+  secret-key: basjdgq3ye83hdd38%7^hkjawgdiujawdgbakwdnakda755768(009$$#$BANSAL
