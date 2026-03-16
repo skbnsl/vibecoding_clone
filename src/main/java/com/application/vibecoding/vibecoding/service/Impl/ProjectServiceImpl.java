@@ -13,6 +13,7 @@ import com.application.vibecoding.vibecoding.mapper.ProjectMapper;
 import com.application.vibecoding.vibecoding.repository.ProjectMemberRepository;
 import com.application.vibecoding.vibecoding.repository.ProjectRepository;
 import com.application.vibecoding.vibecoding.repository.UserRepository;
+import com.application.vibecoding.vibecoding.security.AuthUtil;
 import com.application.vibecoding.vibecoding.service.ProjectService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -34,9 +35,11 @@ public class ProjectServiceImpl implements ProjectService {
     UserRepository userRepository;
     ProjectMapper projectMapper;
     ProjectMemberRepository projectMemberRepository;
+    AuthUtil authUtil;
 
     @Override
-    public List<ProjectSummaryResponse> getUserProjects(Long userId) {
+    public List<ProjectSummaryResponse> getUserProjects() {
+        Long userId = authUtil.getCurrentUserId();
         /*return projectRepository.findAllAccessibleByUser(userId)
                 .stream()
                 .map(projectMapper::toProjectSummaryResponse)
@@ -48,9 +51,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponse createProject(ProjectRequest request, Long userId) {
-        User owner = userRepository.findById(userId).orElseThrow(()->
-                new ResourceNotFoundException("User", userId.toString()));
+    public ProjectResponse createProject(ProjectRequest request) {
+        Long userId = authUtil.getCurrentUserId();
+        /*User owner = userRepository.findById(userId).orElseThrow(()->
+                new ResourceNotFoundException("User", userId.toString()));*/
+        User owner = userRepository.getReferenceById(userId);
 
         Project project = Project.builder()
                 .name(request.name())
@@ -77,13 +82,15 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponse getUserProjectById(Long id, Long userId) {
+    public ProjectResponse getUserProjectById(Long id) {
+        Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(id, userId);
         return projectMapper.toProjectResponse(project);
     }
 
     @Override
-    public ProjectResponse updateProject(Long id, ProjectRequest request, Long userId) {
+    public ProjectResponse updateProject(Long id, ProjectRequest request) {
+        Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(id, userId);
         /*if(!project.getOwner().getId().equals(userId)){
             throw new RuntimeException("You are not allowed to update!");
@@ -95,7 +102,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void softDelete(Long id, Long userId) {
+    public void softDelete(Long id) {
+        Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(id, userId);
         /*if(!project.getOwner().getId().equals(userId)){
             throw new RuntimeException("You are not allowed to delete!");

@@ -11,6 +11,7 @@ import com.application.vibecoding.vibecoding.mapper.ProjectMemberMapper;
 import com.application.vibecoding.vibecoding.repository.ProjectMemberRepository;
 import com.application.vibecoding.vibecoding.repository.ProjectRepository;
 import com.application.vibecoding.vibecoding.repository.UserRepository;
+import com.application.vibecoding.vibecoding.security.AuthUtil;
 import com.application.vibecoding.vibecoding.service.ProjectMemberService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -32,9 +33,11 @@ public class ProjectMemberServiceImpl implements ProjectMemberService {
     ProjectRepository projectRepository;
     UserRepository userRepository;
     ProjectMemberMapper projectMemberMapper;
+    AuthUtil authUtil;
 
     @Override
-    public List<MemberResponse> getProjectMembers(Long projectId, Long userId) {
+    public List<MemberResponse> getProjectMembers(Long projectId) {
+        Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(projectId, userId);
 
 
@@ -49,8 +52,8 @@ public class ProjectMemberServiceImpl implements ProjectMemberService {
     }
 
     @Override
-    public MemberResponse inviteMember(Long projectId, InviteMemberRequest request, Long userId) {
-
+    public MemberResponse inviteMember(Long projectId, InviteMemberRequest request) {
+        Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(projectId, userId);
        /* if(!project.getOwner().getId().equals(userId)){
             throw new RuntimeException("Only admin can invite members!");
@@ -81,7 +84,8 @@ public class ProjectMemberServiceImpl implements ProjectMemberService {
     }
 
     @Override
-    public MemberResponse updateMemberRole(Long projectId, Long memberId, UpdateMemberRoleRequest request, Long userId) {
+    public MemberResponse updateMemberRole(Long projectId, Long memberId, UpdateMemberRoleRequest request) {
+        Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(projectId, userId);
 
         /*if(!project.getOwner().getId().equals(userId)){
@@ -99,7 +103,8 @@ public class ProjectMemberServiceImpl implements ProjectMemberService {
     }
 
     @Override
-    public void removeProjectMember(Long projectId, Long memberId, Long userId) {
+    public void removeProjectMember(Long projectId, Long memberId) {
+        Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(projectId, userId);
         /*if(!project.getOwner().getId().equals(userId)){
             throw new RuntimeException("Not Allowed!");
