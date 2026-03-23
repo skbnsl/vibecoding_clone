@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -82,16 +83,18 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponse getUserProjectById(Long id) {
+    @PreAuthorize("@security.canViewProject(#projectId)") //security is related to SecurityExpression class, beanname of that class
+    public ProjectResponse getUserProjectById(Long projectId) {
         Long userId = authUtil.getCurrentUserId();
-        Project project = getAccessibleProjectById(id, userId);
+        Project project = getAccessibleProjectById(projectId, userId);
         return projectMapper.toProjectResponse(project);
     }
 
     @Override
-    public ProjectResponse updateProject(Long id, ProjectRequest request) {
+    @PreAuthorize("@security.canEditProject(#projectId)") //security is related to SecurityExpression class, beanname of that class
+    public ProjectResponse updateProject(Long projectId, ProjectRequest request) {
         Long userId = authUtil.getCurrentUserId();
-        Project project = getAccessibleProjectById(id, userId);
+        Project project = getAccessibleProjectById(projectId, userId);
         /*if(!project.getOwner().getId().equals(userId)){
             throw new RuntimeException("You are not allowed to update!");
         }*/
@@ -102,6 +105,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    //@PreAuthorize("@security.hasPermission(#projectId, T(com.application.vibecoding.vibecoding.enums.ProjectPermission()), 'project:delete')")
+    @PreAuthorize("@security.canDeleteProject(#projectId)")
     public void softDelete(Long id) {
         Long userId = authUtil.getCurrentUserId();
         Project project = getAccessibleProjectById(id, userId);
