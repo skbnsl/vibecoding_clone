@@ -104,6 +104,14 @@
         </dependency>
         <!--JWT-->
 
+        <!--Stripe Java-->
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>31.1.0</version>
+        </dependency>
+        <!--Stripe Java-->
+
 	</dependencies>
 
 	<build>

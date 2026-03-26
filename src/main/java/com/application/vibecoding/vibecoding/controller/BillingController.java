@@ -1,6 +1,7 @@
 package com.application.vibecoding.vibecoding.controller;
 
 import com.application.vibecoding.vibecoding.dto.subscription.*;
+import com.application.vibecoding.vibecoding.service.PaymentProcessor;
 import com.application.vibecoding.vibecoding.service.PlanService;
 import com.application.vibecoding.vibecoding.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class BillingController {
 
     private final SubscriptionService subscriptionService;
     private final PlanService planService;
+    private final PaymentProcessor paymentProcessor;
 
     @GetMapping("/api/plans")
     public ResponseEntity<List<PlanResponse>> getAllPlans(){
@@ -34,15 +36,13 @@ public class BillingController {
     public ResponseEntity<CheckoutResponse> createCheckoutResponse(
             @RequestBody CheckoutRequest request
             ){
-        Long userId = 1L;
-        return ResponseEntity.ok(subscriptionService.createCheckoutSessionUrl(request, userId));
+        return ResponseEntity.ok(paymentProcessor.createCheckoutSessionUrl(request));
     }
 
-    @PostMapping("/api/stripe/portal")
+    @PostMapping("/api/payments/portal")
     public ResponseEntity<PortalResponse> openCustomerPortal(){
         Long userId = 1L;
-        return ResponseEntity.ok(subscriptionService.openCustomerPortal(userId));
-
+        return ResponseEntity.ok(paymentProcessor.openCustomerPortal(userId));
     }
 
 }
