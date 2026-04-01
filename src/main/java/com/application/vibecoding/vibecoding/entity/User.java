@@ -24,11 +24,14 @@ public class  User implements UserDetails { // User is predefined keyword in pos
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+     Long id;
 
-    private String name;
-    private String username;
-    private String password;
+     String name;
+     String username;
+     String password;
+
+     @Column(unique = true)
+     String stripeCustomerId;
 
     /*private String avatarUrl;*/
 

@@ -6,10 +6,7 @@ import com.application.vibecoding.vibecoding.service.PlanService;
 import com.application.vibecoding.vibecoding.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class BillingController {
         return ResponseEntity.ok(subscriptionService.getCurrentSubscription(userId));
     }
 
-    @PostMapping("/api/stripe/checkout")
+    @PostMapping("/api/payments/checkout")
     public ResponseEntity<CheckoutResponse> createCheckoutResponse(
             @RequestBody CheckoutRequest request
             ){
@@ -43,6 +40,14 @@ public class BillingController {
     public ResponseEntity<PortalResponse> openCustomerPortal(){
         Long userId = 1L;
         return ResponseEntity.ok(paymentProcessor.openCustomerPortal(userId));
+    }
+
+    @PostMapping("/webhooks/payments")
+    public ResponseEntity<String> handlePaymentWebhooks(
+            @RequestBody String payload,
+            @RequestHeader("stripe-signature")
+    ){
+
     }
 
 }
