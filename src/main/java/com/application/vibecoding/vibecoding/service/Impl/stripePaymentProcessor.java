@@ -54,8 +54,14 @@ public class stripePaymentProcessor implements PaymentProcessor {
                 .setSuccessUrl(frontendUrl + "/success.html?session_id={CHECKOUT_SESSION_ID}")
                 .setCancelUrl(frontendUrl + "/cancel.html")
                 .putMetadata("user_id", userId.toString())
-                .putMetadata("plan_id", plan.getId().toString())
-                .build();
+                .putMetadata("plan_id", plan.getId().toString());
+               // .build(); /*
+        // Cannot resolve method 'setCustomerEmail' in 'SessionCreateParams'
+        // Cannot resolve method 'setCustomer' in 'SessionCreateParams'
+        // Cannot resolve method 'build' in 'SessionCreateParams'
+        //Because after build we are trying to update
+        //SessionCreateParams is immutable after build()
+        // */
         try {
 
             String stripeCustomerId = user.getStripeCustomerId();
