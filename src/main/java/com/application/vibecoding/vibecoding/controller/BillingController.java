@@ -45,9 +45,9 @@ public class BillingController {
     @PostMapping("/webhooks/payments")
     public ResponseEntity<String> handlePaymentWebhooks(
             @RequestBody String payload,
-            @RequestHeader("stripe-signature")
+            @RequestHeader("stripe-signature") String sig
     ){
-
+        return null;
     }
 
 }

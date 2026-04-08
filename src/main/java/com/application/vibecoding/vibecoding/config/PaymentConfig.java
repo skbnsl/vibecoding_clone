@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class PaymentConfig {
 
-    @Value("{stripe.api.secret}")
+    @Value("${stripe.api.secret}")
     private String stripeSecretKey;
 
     @PostConstruct
